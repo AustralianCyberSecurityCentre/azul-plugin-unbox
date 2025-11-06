@@ -1,0 +1,11 @@
+arj
+binutils
+bzip2
+cabextract
+libchm-bin
+libmagic-dev
+qpdf
+unrar
+wget
+xz-utils
+zip

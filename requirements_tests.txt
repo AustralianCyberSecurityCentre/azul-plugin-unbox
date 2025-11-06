@@ -1,0 +1,5 @@
+azul-runner[test-utils]
+cart
+pyinstaller>=4.6
+pytest
+tox
