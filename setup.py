@@ -23,8 +23,6 @@ setup(
     entry_points={
         "console_scripts": [
             "azul-plugin-unbox = azul_plugin_unbox.main:main",
-            "pyi_unpacker = azul_plugin_unbox.pyinstaller_unpacker.pyi:main",
-            "pyz_unpacker = azul_plugin_unbox.pyinstaller_unpacker.pyz:main",
         ]
     },
     use_scm_version=True,
