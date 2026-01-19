@@ -20,9 +20,9 @@ def is_filter_out_file(file: BoxChild) -> bool:
     # Attempt to get raw data of the boxChild object.
     file_type_al = None
     if file.file_path:
-        _, _, file_type_al, _, _ = identify.from_file(file.file_path)
+        _, _, file_type_al, _ = identify.from_file(file.file_path)
     elif file.raw_data:
-        _, _, file_type_al, _, _ = identify.from_buffer(file.raw_data)
+        _, _, file_type_al, _ = identify.from_buffer(file.raw_data)
     else:
         # File has no content and can be handled by the main processor.
         return False

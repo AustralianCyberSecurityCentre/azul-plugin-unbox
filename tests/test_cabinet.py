@@ -150,7 +150,9 @@ class TestExecute(BaseUnboxPluginTest):
             ),
             JobResult(
                 state=State(
-                    State.Label.OPT_OUT, failure_name="wrong_file_type", message="wrong file type 'unknown' provided"
+                    State.Label.OPT_OUT,
+                    failure_name="wrong_file_type",
+                    message="wrong file type 'archive/rar' provided",
                 )
             ),
         )
