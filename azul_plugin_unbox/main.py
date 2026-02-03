@@ -34,7 +34,7 @@ from .unbox.box import box as boxes
 from .unbox.box_base import Box
 from .unbox.box_child import BoxChild
 
-SETTINGS_PASSWORD_KEY = "passwords"  # nosec B105
+SETTINGS_PASSWORD_KEY = "passwords"  # noqa: S105
 
 
 class BadMultiUnboxConfigError(Exception):
@@ -116,7 +116,7 @@ class AzulPluginUnbox(BinaryPlugin):
         data_streams = job.get_all_data()
 
         if not data_streams:
-            return State(State.Label.OPT_OUT, "no_streams" "requires data_stream(s)")
+            return State(State.Label.OPT_OUT, "no_streamsrequires data_stream(s)")
 
         provided_passwords = []
         data = None
@@ -127,7 +127,7 @@ class AzulPluginUnbox(BinaryPlugin):
                 provided_passwords = s.read().decode("utf-8").splitlines()
 
         if data is None:
-            return State(State.Label.OPT_OUT, "no_stream_content" "requires data stream with label=content")
+            return State(State.Label.OPT_OUT, "no_stream_contentrequires data stream with label=content")
 
         settings_provided_passwords = job.event.source.settings.get(SETTINGS_PASSWORD_KEY, "")
         # Find all non-empty passwords

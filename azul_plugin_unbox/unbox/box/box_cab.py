@@ -9,15 +9,13 @@ from azul_plugin_unbox.unbox.box_child import BoxChild
 from azul_plugin_unbox.unbox.libs import cabextract
 
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["cabextract"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).communicate()
+    subprocess.Popen(["cabextract"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()  # noqa: S607
 except OSError as err:
     raise ImportError(
         "error = %s\n"
         "module 'cabextract' requires the program 'cabextract'. "
         "Please run apt-get install cabextract" % str(err)
-    )
+    ) from err
 
 
 class Cab(box_base.Box):
@@ -41,8 +39,8 @@ class Cab(box_base.Box):
         """Extract all of the contents of the CAB archive."""
         try:
             self.__get_cab().extract_all(self.dest_filedir)
-        except box_base.NotSupported:
-            raise box_base.NotSupported("Not a Cab file")
+        except box_base.NotSupported as e:
+            raise box_base.NotSupported("Not a Cab file") from e
 
     def _get_all_children(self) -> list[BoxChild]:
         """Get all BoxChild objects associated with the files extracted from the CAB file."""

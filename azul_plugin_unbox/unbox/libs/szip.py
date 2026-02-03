@@ -121,7 +121,7 @@ class Unzip(object):
         # NOTE: this can get into a weird state when 7zip prompts for a
         # password in this case, 7zip will wait on input from stdin
         args = ["7zzs", "l", "-sccUTF-8", "-p%s" % (self.password or ""), "-slt", filepath]
-        proc = subprocess.run(  # noqa: S603, S607 # nosec B603 B607
+        proc = subprocess.run(  # noqa: S603, S607 # noqa: S603 B607
             args,
             env={"TZ": "UTC"},
             stdin=subprocess.DEVNULL,
@@ -170,8 +170,8 @@ class Unzip(object):
         try:
             while not stdout_lines[0].startswith("Path ="):
                 stdout_lines.pop(0)
-        except IndexError:
-            raise NoPathEquals(filepath, "No archive found or path for file does not exist")
+        except IndexError as e:
+            raise NoPathEquals(filepath, "No archive found or path for file does not exist") from e
 
         # pull out each info element
         self.fileinfo = []
@@ -316,7 +316,7 @@ class Unzip(object):
         ]
         # execute seven zip
         # We always use -p arg so we are never prompted for password
-        proc = subprocess.run(  # noqa: S603, S607 # nosec B603 B607
+        proc = subprocess.run(  # noqa: S603, S607 # noqa: S603 B607
             args,
             env={"TZ": "UTC", "LANG": "C.UTF-8"},
             stderr=subprocess.PIPE,
@@ -351,7 +351,7 @@ class Unzip(object):
         ]
         # execute seven zip
         # We always use -p arg so we are never prompted for password
-        proc = subprocess.run(  # noqa: S603, S607 # nosec B603 B607
+        proc = subprocess.run(  # noqa: S603, S607 # noqa: S603 B607
             args,
             env={"TZ": "UTC", "LANG": "C.UTF-8"},
             stderr=subprocess.PIPE,
@@ -383,7 +383,7 @@ class Unzip(object):
             except ExtractNotOK as err:
                 if info.get("Encrypted", "-") == "+":
                     if self.password is not None and self.password != "":  # nosec B105
-                        raise PasswordProtectedFile(info["Path"])
+                        raise PasswordProtectedFile(info["Path"]) from err
                     extract_errors.append(PasswordProtectedFile(info["Path"]))
                 else:
                     extract_errors.append(err)

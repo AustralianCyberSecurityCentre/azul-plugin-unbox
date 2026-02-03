@@ -10,16 +10,14 @@ from azul_plugin_unbox.unbox.libs import arj
 # Uses the arj commandline tool to extract files
 # we don't just reuse 7z as it doesn't have password support for arj
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["arj"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).communicate()
+    subprocess.Popen(["arj"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()  # noqa: S607
 except OSError as err:
     msg = [
         "error = %s" % err,
         "Arj requires the program 'arj' to be installed.",
         "Please run apt-get install arj",
     ]
-    raise ImportError("\n".join(msg))
+    raise ImportError("\n".join(msg)) from err
 
 
 class Arj(box_base.Box):
@@ -42,12 +40,12 @@ class Arj(box_base.Box):
         """Extract all of the arj file contents into the destination directory."""
         try:
             self.__get_arj().extract_all(self.dest_filedir)
-        except arj.ExtractNotOK:
-            raise box_base.PasswordError("Extract Not OK")
-        except (arj.PasswordProtectedFile, arj.IncorrectPasswordException):
-            raise box_base.PasswordError("Password Error")
-        except arj.NotSupportedArchive:
-            raise box_base.NotSupported("File Corrupt")
+        except arj.ExtractNotOK as e:
+            raise box_base.PasswordError("Extract Not OK") from e
+        except (arj.PasswordProtectedFile, arj.IncorrectPasswordException) as e:
+            raise box_base.PasswordError("Password Error") from e
+        except arj.NotSupportedArchive as e:
+            raise box_base.NotSupported("File Corrupt") from e
 
     def _get_all_children(self) -> list[BoxChild]:
         """Get all ChildBox objects associated with the files extracted from the Arj archive."""

@@ -219,8 +219,10 @@ class Unzip(object):
         if "." not in filename:
             self.filepath += "."
 
-        stdout, _ = subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-            ["arj", "l", self.filepath], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        stdout, _ = subprocess.Popen(  # noqa: S603
+            ["arj", "l", self.filepath],  # noqa: S607
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         ).communicate()
         stdout_lines = stdout.decode("utf-8", errors="backslashreplace").splitlines()
 
@@ -287,7 +289,7 @@ class Unzip(object):
         if filename:
             args.append(filename)
 
-        p = subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
+        p = subprocess.Popen(  # noqa: S603, S607 # noqa: S603 B607
             args, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         stdout, _ = p.communicate()

@@ -9,16 +9,14 @@ from azul_plugin_unbox.unbox.libs import upx
 
 # Uses the upx commandline tool to extract files
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["upx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).communicate()
+    subprocess.Popen(["upx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()  # noqa: S607
 except OSError as err:
     msg = [
         "error = %s" % err,
         "Upx requires the program 'upx' to be installed.",
         "Please run apt-get install upx-ucl",
     ]
-    raise ImportError("\n".join(msg))
+    raise ImportError("\n".join(msg)) from err
 
 
 class UPX(box_base.Box):
@@ -33,8 +31,8 @@ class UPX(box_base.Box):
         try:
             upx.unpack(self.src_filepath, self.__get_dest_path())
             return [self.__get_dest_path()]
-        except (upx.NotPackedException, upx.CantUnpackException):
-            raise box_base.NotSupported("File does not appear to be UPX packed")
+        except (upx.NotPackedException, upx.CantUnpackException) as e:
+            raise box_base.NotSupported("File does not appear to be UPX packed") from e
 
     def _get_all_children(self) -> list[BoxChild]:
         """Get the single unpacked file as a child object."""

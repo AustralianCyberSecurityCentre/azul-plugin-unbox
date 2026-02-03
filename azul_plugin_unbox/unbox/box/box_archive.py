@@ -79,7 +79,7 @@ class Archive(box_base.Box):
         """Override extracts the contents of the provided file using either tar, gzip or bz2."""
         try:
             with tarfile.open(self.src_filepath) as t:
-                t.extractall(self.dest_filedir, members=safemembers(t, self.dest_filedir))  # nosec B202
+                t.extractall(self.dest_filedir, members=safemembers(t, self.dest_filedir))  # noqa: S202
                 self.__metadata_encoding = t.encoding
                 self._archive_type = ArchiveType.TAR
                 return
@@ -105,7 +105,7 @@ class Archive(box_base.Box):
                 self._archive_type = ArchiveType.GZ
                 self.__metadata_extra_content = "true"
                 return
-        except Exception:  # nosec B110
+        except Exception:  # noqa: S110
             pass
 
         try:
@@ -114,8 +114,8 @@ class Archive(box_base.Box):
                 self.__write_single_compressed_file(t, ".bz2")
                 self._archive_type = ArchiveType.BZ2
                 return
-        except Exception:
-            raise box_base.NotSupported("Unable to process as tar, gz or bz2")
+        except Exception as e:
+            raise box_base.NotSupported("Unable to process as tar, gz or bz2") from e
 
     def _get_all_children(self) -> list[BoxChild]:
         """Gets all of the child objects extracted from the Archive and the associated metadata.
@@ -133,8 +133,8 @@ class Archive(box_base.Box):
                         fpath = os.path.join(self.dest_filedir, fname)
                         children.append(BoxChild(fname, fpath))
                 return children
-            except (tarfile.ReadError, IOError, EOFError):
-                raise box_base.NotSupported("Unable to process as tar but was expecting a tar file.")
+            except (tarfile.ReadError, IOError, EOFError) as e:
+                raise box_base.NotSupported("Unable to process as tar but was expecting a tar file.") from e
         elif self._archive_type in [ArchiveType.BZ2, ArchiveType.GZ]:
             return [BoxChild(self.__single_child_fname, os.path.join(self.dest_filedir, self.__single_child_fname))]
 

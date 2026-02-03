@@ -48,8 +48,8 @@ class CabExtract(object):
 
         stdout_lines = []
         stderr_lines = []
-        proc = subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-            ["cabextract", "-l", filepath],
+        proc = subprocess.Popen(  # noqa: S603
+            ["cabextract", "-l", filepath],  # noqa: S607
             env={"TZ": "UTC"},
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -89,8 +89,8 @@ class CabExtract(object):
         """Extract file's data from cab with file name (key)."""
         stdout_lines = []
         stderr_lines = []
-        proc = subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-            ["cabextract", "-d", dest_dir, self.filepath],
+        proc = subprocess.Popen(  # noqa: S603
+            ["cabextract", "-d", dest_dir, self.filepath],  # noqa: S607
             env={"TZ": "UTC"},
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,

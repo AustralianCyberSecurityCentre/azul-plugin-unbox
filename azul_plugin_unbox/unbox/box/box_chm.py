@@ -8,16 +8,14 @@ from azul_plugin_unbox.unbox.box_child import BoxChild
 
 # ensure chmlib is installed in this OS
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["extract_chmLib"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).communicate()
+    subprocess.Popen(["extract_chmLib"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()  # noqa: S607
 except OSError as err:
     msg = [
         "error = %s" % err,
         "module 'chm' requires the program 'extract_chmLib'.  \
             Please run apt-get install libchm-bin",
     ]
-    raise ImportError("\n".join(msg))
+    raise ImportError("\n".join(msg)) from err
 
 
 class CHM(box_base.Box):
@@ -54,8 +52,10 @@ class CHM(box_base.Box):
     def _extract(self):
         """Extract all of the contents of the CHM file to the target directory."""
         # try to extract to disk
-        p = subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-            ["extract_chmLib", self.src_filepath, self.dest_filedir], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        p = subprocess.Popen(  # noqa: S603
+            ["extract_chmLib", self.src_filepath, self.dest_filedir],  # noqa: S607
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
         stdout, stderr = p.communicate()
         if p.returncode:
