@@ -17,7 +17,7 @@ except OSError as err:
         "module 'chm' requires the program 'extract_chmLib'.  \
             Please run apt-get install libchm-bin",
     ]
-    raise ImportError("\n".join(msg))
+    raise ImportError("\n".join(msg)) from err
 
 
 class CHM(box_base.Box):

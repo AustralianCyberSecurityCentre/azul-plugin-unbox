@@ -18,7 +18,7 @@ except OSError as err:
         "Upx requires the program 'upx' to be installed.",
         "Please run apt-get install upx-ucl",
     ]
-    raise ImportError("\n".join(msg))
+    raise ImportError("\n".join(msg)) from err
 
 
 class UPX(box_base.Box):
@@ -33,8 +33,8 @@ class UPX(box_base.Box):
         try:
             upx.unpack(self.src_filepath, self.__get_dest_path())
             return [self.__get_dest_path()]
-        except (upx.NotPackedException, upx.CantUnpackException):
-            raise box_base.NotSupported("File does not appear to be UPX packed")
+        except (upx.NotPackedException, upx.CantUnpackException) as e:
+            raise box_base.NotSupported("File does not appear to be UPX packed") from e
 
     def _get_all_children(self) -> list[BoxChild]:
         """Get the single unpacked file as a child object."""

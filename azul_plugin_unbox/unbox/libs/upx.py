@@ -126,7 +126,7 @@ def unpack(src_path: str, dest_path: str):
         stdout, stderr = p.communicate()
     except Exception as err:
         msg = "failed to execute upx - %s - %s" % (err, args)
-        raise UpxExecutionError(msg, stderr, stdout)
+        raise UpxExecutionError(msg, stderr, stdout) from err
 
     if re.search(b"NotPackedException", stderr):
         raise NotPackedException()

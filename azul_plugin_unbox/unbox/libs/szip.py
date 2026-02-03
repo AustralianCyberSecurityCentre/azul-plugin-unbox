@@ -170,8 +170,8 @@ class Unzip(object):
         try:
             while not stdout_lines[0].startswith("Path ="):
                 stdout_lines.pop(0)
-        except IndexError:
-            raise NoPathEquals(filepath, "No archive found or path for file does not exist")
+        except IndexError as e:
+            raise NoPathEquals(filepath, "No archive found or path for file does not exist") from e
 
         # pull out each info element
         self.fileinfo = []
@@ -383,7 +383,7 @@ class Unzip(object):
             except ExtractNotOK as err:
                 if info.get("Encrypted", "-") == "+":
                     if self.password is not None and self.password != "":  # nosec B105
-                        raise PasswordProtectedFile(info["Path"])
+                        raise PasswordProtectedFile(info["Path"]) from err
                     extract_errors.append(PasswordProtectedFile(info["Path"]))
                 else:
                     extract_errors.append(err)

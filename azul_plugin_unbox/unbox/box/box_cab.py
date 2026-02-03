@@ -17,7 +17,7 @@ except OSError as err:
         "error = %s\n"
         "module 'cabextract' requires the program 'cabextract'. "
         "Please run apt-get install cabextract" % str(err)
-    )
+    ) from err
 
 
 class Cab(box_base.Box):
@@ -41,8 +41,8 @@ class Cab(box_base.Box):
         """Extract all of the contents of the CAB archive."""
         try:
             self.__get_cab().extract_all(self.dest_filedir)
-        except box_base.NotSupported:
-            raise box_base.NotSupported("Not a Cab file")
+        except box_base.NotSupported as e:
+            raise box_base.NotSupported("Not a Cab file") from e
 
     def _get_all_children(self) -> list[BoxChild]:
         """Get all BoxChild objects associated with the files extracted from the CAB file."""

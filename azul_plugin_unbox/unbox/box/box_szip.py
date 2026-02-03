@@ -20,7 +20,7 @@ except OSError as err:
         "7z requires the program '7zip'.  \
             Please run apt-get install p7zip-full",
     ]
-    raise ImportError("\n".join(msg))
+    raise ImportError("\n".join(msg)) from err
 
 
 class Szip(box_base.Box):
@@ -43,18 +43,18 @@ class Szip(box_base.Box):
         """Extract all of the files in the seven zip archive to the destination directory."""
         try:
             self.__get_sz().extractall(self.dest_filedir)
-        except szip.ExtractNotOK:
-            raise box_base.PasswordError("Extract Not OK")
-        except szip.PasswordProtectedFile:
-            raise box_base.PasswordError("Password Error")
-        except szip.NotSupportedArchive:
-            raise box_base.NotSupported("File Corrupt")
+        except szip.ExtractNotOK as e:
+            raise box_base.PasswordError("Extract Not OK") from e
+        except szip.PasswordProtectedFile as e:
+            raise box_base.PasswordError("Password Error") from e
+        except szip.NotSupportedArchive as e:
+            raise box_base.NotSupported("File Corrupt") from e
         except szip.SevenZipException as e:
             # this error is returned when file is corrupt.
             if "Unexpected end of archive" in e.cause:
-                raise box_base.Corrupted("File Corrupt: %s" % e.cause)
+                raise box_base.Corrupted("File Corrupt: %s" % e.cause) from e
             else:
-                raise box_base.NotSupported("7zip decode error: %s" % e.cause)
+                raise box_base.NotSupported("7zip decode error: %s" % e.cause) from e
 
     def _get_all_children(self):
         """Get all of the ChildBox objects for the objects extracted from the 7zip archive."""

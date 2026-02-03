@@ -38,14 +38,14 @@ class Zip(box_base.Box):
         except RuntimeError as e:
             if isinstance(e, NotImplementedError):
                 # Typically message is "That compression method is not supported"
-                raise box_base.NotSupported(f"{e}")
-            raise box_base.PasswordError()
-        except ValueError:
-            raise box_base.NotSupported("Bad Zip Header, probably an invalid zip file.")
-        except OSError:  # Occurs when malformed zip file returns a negative header offset.
-            raise box_base.NotSupported("Bad Zip Header, probably an invalid zip file.")
+                raise box_base.NotSupported(f"{e}") from e
+            raise box_base.PasswordError() from e
+        except ValueError as e:
+            raise box_base.NotSupported("Bad Zip Header, probably an invalid zip file.") from e
+        except OSError as e:  # Occurs when malformed zip file returns a negative header offset.
+            raise box_base.NotSupported("Bad Zip Header, probably an invalid zip file.") from e
         except Exception as bad_zip:
-            raise box_base.NotSupported(str(bad_zip)[:80] + "...")
+            raise box_base.NotSupported(str(bad_zip)[:80] + "...") from bad_zip
 
     def _get_all_children(self) -> list[BoxChild]:
         """Obtain all child objects from the zip and return them."""

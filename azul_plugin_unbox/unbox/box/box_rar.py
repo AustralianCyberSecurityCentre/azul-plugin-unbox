@@ -16,8 +16,8 @@ try:
     ).communicate()
 except OSError as err:
     raise ImportError(
-        "error = %s\n" "module 'rarfile' requires the program 'unrar'. " "Please run apt-get install unrar" % str(err)
-    )
+        "error = %s\nmodule 'rarfile' requires the program 'unrar'. Please run apt-get install unrar" % str(err)
+    ) from err
 
 
 class Rar(box_base.Box):
@@ -45,25 +45,25 @@ class Rar(box_base.Box):
             self.__rar_file = rarfile.RarFile(self.src_filepath)
         try:
             self.__rar_file.setpassword(self.__get_password_or_none())
-        except rarfile.BadRarFile:
-            raise box_base.PasswordError()
+        except rarfile.BadRarFile as e:
+            raise box_base.PasswordError() from e
         return self.__rar_file
 
     def _extract(self):
         """Extract RAR file to target directory."""
         try:
             self.__get_rarfile().extractall(path=self.dest_filedir, pwd=self.__get_password_or_none())
-        except rarfile.PasswordRequired:
-            raise box_base.PasswordError()
+        except rarfile.PasswordRequired as e:
+            raise box_base.PasswordError() from e
         except rarfile.BadRarFile as e:
             # Depending on the error message, we might need to raise a
             # PasswordError here
             if str(e).startswith("Failed the read enough data"):
-                raise box_base.PasswordError()
+                raise box_base.PasswordError() from e
             elif "CRC check failed" in str(e):
-                raise box_base.PasswordError()
+                raise box_base.PasswordError() from e
 
-            raise box_base.NotSupported("File is corrupt")
+            raise box_base.NotSupported("File is corrupt") from e
 
     def _get_all_children(self) -> list[BoxChild]:
         """Obtain all BoxChild objects associated with the files extracted from the archive."""

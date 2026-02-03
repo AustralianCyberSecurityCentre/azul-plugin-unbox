@@ -21,8 +21,8 @@ from azul_plugin_unbox.unbox.box_child import BoxChild
 try:
     Popen(["qpdf"], stdout=PIPE, stderr=PIPE).communicate()  # noqa: S603, S607 # nosec B603 B607
 except OSError as e:
-    msg = "error = %s\n" "box_pdf requires the program 'qpdf'. Run `$ apt-get install qpdf`"
-    raise ImportError(msg % e)
+    msg = "error = %s\nbox_pdf requires the program 'qpdf'. Run `$ apt-get install qpdf`"
+    raise ImportError(msg % e) from e
 
 
 class Pdf(box_base.Box):
@@ -134,7 +134,7 @@ class Pdf(box_base.Box):
             )
             stdout, stderr = process.communicate()
         except OSError as err:
-            raise OSError("Failed to Popen('%s') with %s" % (" ".join(cmd), err))
+            raise OSError("Failed to Popen('%s') with %s" % (" ".join(cmd), err)) from err
 
         if b"invalid password" in stderr:
             raise box_base.PasswordError("invalid password")
@@ -153,7 +153,7 @@ class Pdf(box_base.Box):
                 )
                 stdout, stderr = process.communicate()
             except OSError as err:
-                raise OSError("Failed to Popen('%s') with %s" % (" ".join(cmd), err))
+                raise OSError("Failed to Popen('%s') with %s" % (" ".join(cmd), err)) from err
 
             # make sure it's actually a PDF
             if b"not a PDF file" in stderr or b"unable to find trailer dictionary while recovering" in stderr:
