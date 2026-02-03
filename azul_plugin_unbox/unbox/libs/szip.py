@@ -121,7 +121,7 @@ class Unzip(object):
         # NOTE: this can get into a weird state when 7zip prompts for a
         # password in this case, 7zip will wait on input from stdin
         args = ["7zzs", "l", "-sccUTF-8", "-p%s" % (self.password or ""), "-slt", filepath]
-        proc = subprocess.run(  # noqa: S603, S607 # nosec B603 B607
+        proc = subprocess.run(  # noqa: S603, S607 # noqa: S603 B607
             args,
             env={"TZ": "UTC"},
             stdin=subprocess.DEVNULL,
@@ -316,7 +316,7 @@ class Unzip(object):
         ]
         # execute seven zip
         # We always use -p arg so we are never prompted for password
-        proc = subprocess.run(  # noqa: S603, S607 # nosec B603 B607
+        proc = subprocess.run(  # noqa: S603, S607 # noqa: S603 B607
             args,
             env={"TZ": "UTC", "LANG": "C.UTF-8"},
             stderr=subprocess.PIPE,
@@ -351,7 +351,7 @@ class Unzip(object):
         ]
         # execute seven zip
         # We always use -p arg so we are never prompted for password
-        proc = subprocess.run(  # noqa: S603, S607 # nosec B603 B607
+        proc = subprocess.run(  # noqa: S603, S607 # noqa: S603 B607
             args,
             env={"TZ": "UTC", "LANG": "C.UTF-8"},
             stderr=subprocess.PIPE,

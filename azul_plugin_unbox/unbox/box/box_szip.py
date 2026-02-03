@@ -9,8 +9,8 @@ from azul_plugin_unbox.unbox.libs import szip
 
 # ensure 7zip is installed in this OS
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["7zzs"],
+    subprocess.Popen(
+        ["7zzs"],  # noqa: S607
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ).communicate()

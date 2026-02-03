@@ -9,9 +9,7 @@ from azul_plugin_unbox.unbox.box_child import BoxChild
 from azul_plugin_unbox.unbox.libs import cabextract
 
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["cabextract"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).communicate()
+    subprocess.Popen(["cabextract"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()  # noqa: S607
 except OSError as err:
     raise ImportError(
         "error = %s\n"

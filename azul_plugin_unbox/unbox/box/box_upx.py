@@ -9,9 +9,7 @@ from azul_plugin_unbox.unbox.libs import upx
 
 # Uses the upx commandline tool to extract files
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["upx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).communicate()
+    subprocess.Popen(["upx"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()  # noqa: S607
 except OSError as err:
     msg = [
         "error = %s" % err,

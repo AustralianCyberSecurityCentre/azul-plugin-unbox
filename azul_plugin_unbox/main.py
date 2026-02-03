@@ -34,7 +34,7 @@ from .unbox.box import box as boxes
 from .unbox.box_base import Box
 from .unbox.box_child import BoxChild
 
-SETTINGS_PASSWORD_KEY = "passwords"  # nosec B105
+SETTINGS_PASSWORD_KEY = "passwords"  # noqa: S105
 
 
 class BadMultiUnboxConfigError(Exception):

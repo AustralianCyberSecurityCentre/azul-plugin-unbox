@@ -79,7 +79,7 @@ class Archive(box_base.Box):
         """Override extracts the contents of the provided file using either tar, gzip or bz2."""
         try:
             with tarfile.open(self.src_filepath) as t:
-                t.extractall(self.dest_filedir, members=safemembers(t, self.dest_filedir))  # nosec B202
+                t.extractall(self.dest_filedir, members=safemembers(t, self.dest_filedir))  # noqa: S202
                 self.__metadata_encoding = t.encoding
                 self._archive_type = ArchiveType.TAR
                 return
@@ -105,7 +105,7 @@ class Archive(box_base.Box):
                 self._archive_type = ArchiveType.GZ
                 self.__metadata_extra_content = "true"
                 return
-        except Exception:  # nosec B110
+        except Exception:  # noqa: S110
             pass
 
         try:

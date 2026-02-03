@@ -11,8 +11,10 @@ from azul_plugin_unbox.unbox.box_child import BoxChild
 
 # ensure unrar is installed in this OS
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["unrar"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    subprocess.Popen(
+        ["unrar"],  # noqa: S607
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     ).communicate()
 except OSError as err:
     raise ImportError(

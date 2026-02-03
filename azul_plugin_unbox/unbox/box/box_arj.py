@@ -10,9 +10,7 @@ from azul_plugin_unbox.unbox.libs import arj
 # Uses the arj commandline tool to extract files
 # we don't just reuse 7z as it doesn't have password support for arj
 try:
-    subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
-        ["arj"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    ).communicate()
+    subprocess.Popen(["arj"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()  # noqa: S607
 except OSError as err:
     msg = [
         "error = %s" % err,

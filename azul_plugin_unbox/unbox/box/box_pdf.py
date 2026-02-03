@@ -19,7 +19,7 @@ from azul_plugin_unbox.unbox import box_base
 from azul_plugin_unbox.unbox.box_child import BoxChild
 
 try:
-    Popen(["qpdf"], stdout=PIPE, stderr=PIPE).communicate()  # noqa: S603, S607 # nosec B603 B607
+    Popen(["qpdf"], stdout=PIPE, stderr=PIPE).communicate()  # noqa: S603, S607 # noqa: S603 B607
 except OSError as e:
     msg = "error = %s\nbox_pdf requires the program 'qpdf'. Run `$ apt-get install qpdf`"
     raise ImportError(msg % e) from e
@@ -129,7 +129,7 @@ class Pdf(box_base.Box):
             self.__decrypted_file_path,
         ]
         try:
-            process = Popen(  # noqa:  S603, S607 # nosec B603 B607
+            process = Popen(  # noqa:  S603, S607 # noqa: S603 B607
                 cmd, stdout=PIPE, stderr=PIPE, creationflags=self.creationflags
             )
             stdout, stderr = process.communicate()
@@ -148,7 +148,7 @@ class Pdf(box_base.Box):
             # work out if we are encrypted
             cmd = ("qpdf", "--show-encryption", self.src_filepath)
             try:
-                process = Popen(  # noqa: S603, S607 # nosec B603 B607
+                process = Popen(  # noqa: S603, S607 # noqa: S603 B607
                     cmd, stdout=PIPE, stderr=PIPE, creationflags=self.creationflags
                 )
                 stdout, stderr = process.communicate()
@@ -180,7 +180,7 @@ class Pdf(box_base.Box):
 
         get_obj_cmd = ["qpdf", "--show-xref"] + cmd_append
 
-        process = Popen(  # noqa: S603, S607 # nosec B603 B607
+        process = Popen(  # noqa: S603, S607 # noqa: S603 B607
             get_obj_cmd, stdout=PIPE, stderr=PIPE, creationflags=self.creationflags
         )
         stdout, stderr = process.communicate()
@@ -196,7 +196,7 @@ class Pdf(box_base.Box):
 
             cmd = ["qpdf", f"--show-object={obj_id}"] + cmd_append
 
-            process = Popen(  # noqa: S603, S607 # nosec B603 B607
+            process = Popen(  # noqa: S603, S607 # noqa: S603 B607
                 cmd, stdout=PIPE, stderr=PIPE, creationflags=self.creationflags
             )
             stdout, stderr = process.communicate()
@@ -205,7 +205,7 @@ class Pdf(box_base.Box):
             if stdout.startswith(b"Object is stream."):
                 objdict = stdout.splitlines()[1]
                 cmd.insert(2, "--filtered-stream-data")
-                process = Popen(  # noqa: S603, S607 # nosec B603 B607
+                process = Popen(  # noqa: S603, S607 # noqa: S603 B607
                     cmd, stdout=PIPE, stderr=PIPE, creationflags=self.creationflags
                 )
                 stdout, stderr = process.communicate()

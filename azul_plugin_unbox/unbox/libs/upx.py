@@ -120,7 +120,7 @@ def unpack(src_path: str, dest_path: str):
 
     stdout = stderr = b""
     try:
-        p = subprocess.Popen(  # noqa: S603, S607 # nosec B603 B607
+        p = subprocess.Popen(  # noqa: S603, S607 # noqa: S603 B607
             args, stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         stdout, stderr = p.communicate()
