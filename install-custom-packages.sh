@@ -11,8 +11,8 @@ rm -rf /opt/7z
 rm -f /usr/bin/7zzs
 # Install to opt and linx to usr bin.
 mkdir /opt/7z
-tar -xf ./7z2409-linux-x64.tar.xz -C /opt/7z
-rm -r ./7z2409-linux-x64.tar.xz
+tar -xf ./7z2600-linux-x64.tar.xz -C /opt/7z
+rm -r ./7z2600-linux-x64.tar.xz
 ln -s /opt/7z/7zzs /usr/bin/7zzs
 
 # Install latest version of UPX. (run with sudo)
