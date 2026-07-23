@@ -280,7 +280,7 @@ class Unzip(object):
             raise FileCountMisMatchException(filepath, extracted_files, total_count, self.fileinfo)
         # all good!
 
-    def _extract(self, dest_dir: str, filename: str = None) -> str | list[str]:
+    def _extract(self, dest_dir: str, filename: str | None = None) -> str | list[str]:
         """Extract content for the supplied filename and returns the path to the extracted file."""
         args = ["arj"]
         if self.password:
@@ -314,11 +314,11 @@ class Unzip(object):
 
     def extract(self, dest_dir: str, filename: str) -> str:
         """Extract the contents of a single child file from an arj file and return the path to the extracted file."""
-        return self._extract(dest_dir, filename)
+        return self._extract(dest_dir, filename)  # ty: ignore[invalid-return-type] str vs. list[str] logic is handled by self._extract()
 
     def extract_all(self, dest_dir: str) -> list[str]:
         """Extract the contents of all child object in an arj archive and return the path to all extracted files."""
-        return self._extract(dest_dir)
+        return self._extract(dest_dir)  # ty: ignore[invalid-return-type] str vs. list[str] logic is handled by self._extract()
 
     def __len__(self):
         """Return how many file entries in this ARJ file."""

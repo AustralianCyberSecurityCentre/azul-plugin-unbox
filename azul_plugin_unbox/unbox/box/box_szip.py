@@ -29,13 +29,13 @@ class Szip(box_base.Box):
     def __init__(self, src_filepath: str, target_dir: str, passwords=None):
         """Create a new unpacker that uses 7zip to unpack files."""
         super().__init__(src_filepath, target_dir, passwords)
-        self.__cached_sz: szip.Unzip = None
+        self.__cached_sz: szip.Unzip | None = None
         self.__prev_password: str = ""
 
     def __get_sz(self):
         """Get the 7zip object, if the password has changed create a new 7zip object."""
         if self.__prev_password != self.password or not self.__cached_sz:
-            self.__prev_password = self.password
+            self.__prev_password = self.password if self.password else ""
             self.__cached_sz = szip.Unzip(self.src_filepath, password=self.password)
         return self.__cached_sz
 

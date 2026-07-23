@@ -7,6 +7,7 @@ import io
 import os
 import tarfile
 import zlib
+from typing import cast
 
 from azul_plugin_unbox.unbox import box_base
 from azul_plugin_unbox.unbox.box_child import BoxChild
@@ -63,8 +64,8 @@ class Archive(box_base.Box):
         super().__init__(src_filepath, target_dir, passwords)
         self._archive_type: ArchiveType = ArchiveType.UNKNOWN
         self.__single_child_fname: str = ""
-        self.__metadata_encoding: str = None
-        self.__metadata_extra_content: str = None
+        self.__metadata_encoding: str = ""
+        self.__metadata_extra_content: str = ""
 
     def __write_single_compressed_file(self, fh: gzip.GzipFile | bz2.BZ2File | io.BufferedRandom, strip_ext: str):
         """Write a compressed Gzip or Bz2 file to disk through a stream."""
@@ -101,7 +102,7 @@ class Archive(box_base.Box):
         try:
             with open(self.src_filepath, "rb") as t:
                 data = zlib.decompress(t.read(), wbits=31)
-                self.__write_single_compressed_file(io.BufferedRandom(io.BytesIO(data)), ".gz")
+                self.__write_single_compressed_file(io.BufferedRandom(cast(io.RawIOBase, io.BytesIO(data))), ".gz")
                 self._archive_type = ArchiveType.GZ
                 self.__metadata_extra_content = "true"
                 return

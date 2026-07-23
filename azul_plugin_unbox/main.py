@@ -55,16 +55,20 @@ class AzulPluginUnbox(BinaryPlugin):
         max_extracted_files=(int, 1000),
     )
     # Child unbox subclass should set any additional features it generates (but don't need to duplicate these)
-    FEATURES = [
-        Feature(name="box_password", desc="Password used to unbox this binary", type=FeatureType.String),
-        Feature(name="box_count", desc="Number of items found in the box", type=FeatureType.Integer),
-        Feature(name="box_type", desc="The binary is of this box type", type=FeatureType.String),
-        Feature(name="box_filepath", desc="This entity contains this filepath", type=FeatureType.Filepath),
-        Feature(name="box_insertdate", desc="Date the file was inserted into the archive", type=FeatureType.Datetime),
-        Feature(name="filename", desc="The name of the file in its parent archive", type=FeatureType.Filepath),
-        # Set generic feature to allow correlation against other sources of passwords too
-        Feature(name="password", desc="Password used to unbox this binary", type=FeatureType.String),
-    ]
+    FEATURES = set(
+        [
+            Feature(name="box_password", desc="Password used to unbox this binary", type=FeatureType.String),
+            Feature(name="box_count", desc="Number of items found in the box", type=FeatureType.Integer),
+            Feature(name="box_type", desc="The binary is of this box type", type=FeatureType.String),
+            Feature(name="box_filepath", desc="This entity contains this filepath", type=FeatureType.Filepath),
+            Feature(
+                name="box_insertdate", desc="Date the file was inserted into the archive", type=FeatureType.Datetime
+            ),
+            Feature(name="filename", desc="The name of the file in its parent archive", type=FeatureType.Filepath),
+            # Set generic feature to allow correlation against other sources of passwords too
+            Feature(name="password", desc="Password used to unbox this binary", type=FeatureType.String),
+        ]
+    )
 
     # Active Unbox # FUTURE make this cmdline option.
     ACTIVE_UNBOX: list[BaseUnbox] = [
@@ -78,12 +82,12 @@ class AzulPluginUnbox(BinaryPlugin):
         upx.UPX(),
     ]
 
-    def __init__(self, config: settings.Settings | dict = None):
+    def __init__(self, config: settings.Settings | dict | None = None):
         super().__init__(config)
 
-        self.current_file_format = None
-        self.current_passwords = None
-        self.current_source_filepath = None
+        self.current_file_format: str | None = None
+        self.current_passwords: list[str] | None = None
+        self.current_source_filepath: str | None = None
 
         def get(unboxClass: BaseUnbox):
             return lambda x: self.execute_unboxer(unboxClass, x)
@@ -121,6 +125,11 @@ class AzulPluginUnbox(BinaryPlugin):
         provided_passwords = []
         data = None
         for s in data_streams:
+            if s.file_info is None:
+                return State(
+                    State.Label.ERROR_EXCEPTION,
+                    "Expected s.file_info to be a Datastream, got None",
+                )
             if s.file_info.label == "content":
                 data = s
             elif s.file_info.label == "password_dictionary":
@@ -134,11 +143,11 @@ class AzulPluginUnbox(BinaryPlugin):
         settings_provided_passwords = [x for x in settings_provided_passwords.split("\n") if x]
 
         # make a copy of passwords to avoid a box modifying them for future runs
-        passwords = list(self.cfg.default_passwords or ["password", "infected"])
+        passwords = list(self.cfg.default_passwords or ["password", "infected"])  # ty: ignore[unresolved-attribute] ty doesn't understand add_settings
         passwords.extend(provided_passwords)
         passwords.extend(settings_provided_passwords)
 
-        self.current_file_format = data.file_info.file_format
+        self.current_file_format = data.file_info.file_format  # ty: ignore[unresolved-attribute] file_info being None is already handled above
         self.current_passwords = passwords
         self.current_source_filepath = data.get_filepath()
 
@@ -163,29 +172,31 @@ class AzulPluginUnbox(BinaryPlugin):
 
         BoxClass: Type[Box] = boxes[unboxer.box_class]
         try:
+            if self.current_source_filepath is None:
+                raise TypeError("Expected self.current_source_filepath to be str, got None")
             box: Box = BoxClass(
                 self.current_source_filepath,
                 tempfile.gettempdir(),
-                passwords=self.current_passwords,
+                passwords=self.current_passwords,  # ty: ignore[invalid-argument-type] expects list[str | bytes] | None, but Box handles list[str] | None just fine
             )
         except Exception as ex:
             return unboxer.exception_handler(ex, self)
 
         child_filepaths = []
         file_count = 0
-        max_files = self.cfg.max_extracted_files or 1000
+        max_files = self.cfg.max_extracted_files or 1000  # ty: ignore[unresolved-attribute] ty doesn't understand add_settings
         # Add each child for this box type
         try:
             try:
-                box_children = sorted(box.get_children(), key=lambda b: b.name)
+                box_children = sorted(box.get_children(), key=lambda b: b.name)  # ty: ignore[missing-argument] false positive, ty doesn't think `self` is supplied to get_children(), but that is obviously `box`
             except Exception:
-                # Attempt to use a secondary unboxer if the primary failed and has a backoup.
+                # Attempt to use a secondary unboxer if the primary failed and has a backup.
                 did_secondary_fail = True
                 if unboxer.secondary_box_class:
                     with contextlib.suppress(Exception):
                         SecondaryBoxClass: Type[Box] = boxes[unboxer.secondary_box_class]
-                        secondary_box = SecondaryBoxClass(box.src_filepath, box.dest_filedir, passwords=box.passwords)
-                        box_children = sorted(secondary_box.get_children(), key=lambda b: b.name)
+                        secondary_box = SecondaryBoxClass(box.src_filepath, box.dest_filedir, passwords=box.passwords)  # ty: ignore[invalid-argument-type] expects list[str | bytes] | None, but Box handles list[str] | None just fine
+                        box_children = sorted(secondary_box.get_children(), key=lambda b: b.name)  # ty: ignore[missing-argument] false positive, ty doesn't think `self` is supplied to get_children(), but that is obviously `secondary_box`
                         box = secondary_box
                         did_secondary_fail = False
 
@@ -259,13 +270,15 @@ class AzulPluginUnbox(BinaryPlugin):
                         pw = str(pw)
                 self.add_feature_values("box_password", pw)
                 self.add_feature_values("password", pw)
+            if self.current_file_format is None:
+                raise ValueError("Expected self.current_file_format to be str, got None")
             self.add_feature_values("box_type", unboxer.get_descriptive_box_display_name(self.current_file_format))
             # count may not match num children if box lists dirs separately
             self.add_feature_values("box_count", len(box_children))
 
             # Add the metadata defined for this box type
             for metatype, feature_name, conv_func in unboxer.metatypes:
-                metadata = box.get_meta().get(metatype)
+                metadata = box.get_meta().get(metatype)  # ty: ignore[missing-argument] false positive, ty doesn't think `self` is supplied to get_meta(), but that is obviously `box`
                 if metadata is None:
                     continue
                 # Not added as FV() as value might be a list.
@@ -279,7 +292,7 @@ class AzulPluginUnbox(BinaryPlugin):
             # trigger a cleanup at end of processing to find samples that cause this to fail
             box.cleanup()
 
-    def add_binary(self, child: BoxChild, relationship: dict, child_features: dict[str, Any] = None):
+    def add_binary(self, child: BoxChild, relationship: dict, child_features: dict[str, Any] | None = None):
         """Add a binary as per BinaryTemplate plugin."""
         if child.file_path:
             # Drop empty file

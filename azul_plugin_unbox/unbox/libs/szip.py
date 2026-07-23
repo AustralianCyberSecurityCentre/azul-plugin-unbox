@@ -335,7 +335,7 @@ class Unzip(object):
 
         return output_path
 
-    def extractall(self, output_dir: str) -> str:
+    def extractall(self, output_dir: str) -> None:
         """Extract all files from archive, using 7z.
 
         Will use supplied password or default to any supplied during init.

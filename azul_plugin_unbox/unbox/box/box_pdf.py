@@ -44,7 +44,7 @@ class Pdf(box_base.Box):
         self._is_encrypted = None
         self._child_streams = dict()
         self.__low_ram = low_memory
-        self.__decrypted_file_path = None
+        self.__decrypted_file_path: str | None = None
 
         # ensure no window is created.
         self.creationflags = 0
@@ -60,6 +60,8 @@ class Pdf(box_base.Box):
         """Get all of the child streams from a PDF and if the PDF is encrypted get the pdf as well."""
         children = list()
         if self.is_encrypted:
+            if self.__decrypted_file_path is None:
+                raise TypeError("Expected self.__decrypted_file_path to be str, got None")
             file_name = os.path.basename(self.__decrypted_file_path)
             children.append(BoxChild(file_name, file_path=self.__decrypted_file_path))
 

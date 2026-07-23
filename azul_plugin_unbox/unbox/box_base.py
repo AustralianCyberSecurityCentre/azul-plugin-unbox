@@ -73,7 +73,7 @@ class Box(ABC):
         self,
         src_filepath: str,
         target_dir: str,
-        passwords: list[bytes | str] = None,
+        passwords: list[bytes | str] | None = None,
     ):
         """Create a new box format unpacker for the given filepath and place extracted content into the target_dir.
 
@@ -91,9 +91,15 @@ class Box(ABC):
         if passwords is None:
             passwords = []
 
-        self.__passwords: list[str] = [self.__stringy_password(pwd) for pwd in passwords]
-        self.__password_guess: str = None
-        self.__password: str = None
+        self.__password_guess: str | None = None
+        self.__password: str | None = None
+        self.__passwords: list[str] = []
+
+        for pwd in passwords:
+            pwd_str = self.__stringy_password(pwd)
+            if pwd_str is None:
+                raise TypeError("Expected passwords to be list[str | bytes], got list[str | bytes | None]")
+            self.__passwords.append(pwd_str)
 
         self._filepath = os.path.abspath(src_filepath)
         if not os.path.exists(self._filepath):
@@ -112,7 +118,10 @@ class Box(ABC):
 
     def add_password(self, password: str | bytes):
         """Method to allow child classes to append passwords."""
-        self.__passwords.insert(0, self.__stringy_password(password))
+        pwd_str = self.__stringy_password(password)
+        if pwd_str is None:
+            raise TypeError("Expected password to be str | bytes, got None")
+        self.__passwords.insert(0, pwd_str)
 
     @property
     def password(self) -> str | None:
@@ -123,7 +132,7 @@ class Box(ABC):
         return self.__stringy_password(self.__password)
 
     @password.setter
-    def password(self, value: bytes | str):
+    def password(self, value: bytes | str | None):
         """Allows for setting of the password value."""
         self.__password_guess = self.__stringy_password(value)
 
@@ -136,7 +145,7 @@ class Box(ABC):
     def password_bytes(self) -> bytes | None:
         """Get the current password as a bytes string."""
         pwd = self.password
-        if pwd:
+        if isinstance(pwd, str):
             return pwd.encode("utf-8")
         return pwd
 
@@ -184,7 +193,7 @@ class Box(ABC):
         """Get all child objects for the extracted box."""
         # Ensure that if the archive hasn't been extracted yet, it is extracted now.
         if not self.has_extracted:
-            self.extract()
+            self.extract()  # ty: ignore[missing-argument] ty thinks "required parameter `self`" is not provided, but the beginning of this line says otherwise
 
         if len(self._children) == 0:
             self._children = self._get_all_children()
@@ -199,7 +208,7 @@ class Box(ABC):
         """Return all of the parent box metadata in a dictionary."""
         # Ensure that if the archive hasn't been extracted yet, it is extracted now.
         if not self.has_extracted:
-            self.extract()
+            self.extract()  # ty: ignore[missing-argument] ty thinks "required parameter `self`" is not provided, but the beginning of this line says otherwise
 
         if len(self._cached_meta) == 0:
             self._cached_meta = self._get_full_meta()
@@ -216,7 +225,8 @@ class Box(ABC):
         for method in dir(self):
             if method.startswith(hdr):
                 method_handle = getattr(self, method, None)
-                meta[method[len(hdr) :]] = method_handle()
+                if method_handle is not None:
+                    meta[method[len(hdr) :]] = method_handle()
         return meta
 
     def list_meta(self):

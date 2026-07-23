@@ -12,7 +12,7 @@ class InvalidChildError(Exception):
 class BoxChild:
     """Child object that has been extracted from a box."""
 
-    def __init__(self, name: str, file_path: str = None, data: bytes = None):
+    def __init__(self, name: str, file_path: str | None = None, data: bytes | None = None):
         """Init.
 
         Args:
