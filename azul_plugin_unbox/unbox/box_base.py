@@ -98,7 +98,7 @@ class Box(ABC):
         for pwd in passwords:
             pwd_str = self.__stringy_password(pwd)
             if pwd_str is None:
-                raise TypeError("Expected passwords to be list[str | bytes], got list[str | bytes | None]")
+                continue
             self.__passwords.append(pwd_str)
 
         self._filepath = os.path.abspath(src_filepath)
@@ -120,7 +120,7 @@ class Box(ABC):
         """Method to allow child classes to append passwords."""
         pwd_str = self.__stringy_password(password)
         if pwd_str is None:
-            raise TypeError("Expected password to be str | bytes, got None")
+            return
         self.__passwords.insert(0, pwd_str)
 
     @property
