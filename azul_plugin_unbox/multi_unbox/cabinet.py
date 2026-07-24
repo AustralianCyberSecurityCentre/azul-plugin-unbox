@@ -32,7 +32,7 @@ class Cab(BaseUnbox):
         ("modified", "box_insertdate", datetime.datetime.fromisoformat),
     ]
 
-    def exception_handler(self, ex: Exception, plugin_ref: BinaryPlugin) -> dict:
+    def exception_handler(self, ex: Exception, plugin_ref: BinaryPlugin) -> State:
         """Non-CAB files are not an error condition."""
         if isinstance(ex, box_base.NotSupported):
             return State(State.Label.OPT_OUT, "not_cab", "not a cab file")

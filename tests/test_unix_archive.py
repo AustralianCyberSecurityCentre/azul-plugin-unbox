@@ -174,8 +174,7 @@ class TestUnixArchive(BaseUnboxPluginTest):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="custom_id",
+                        sha256="custom_id",
                         features={
                             "box_count": [FV(1)],
                             "box_filepath": [FV("no-name")],
@@ -184,9 +183,8 @@ class TestUnixArchive(BaseUnboxPluginTest):
                         },
                     ),
                     Event(
-                        parent=EventParent(entity_type="binary", entity_id="custom_id"),
-                        entity_type="binary",
-                        entity_id="28e65c268dbcab8733e7205bab86efc9a758a0d8f2156edc85d5f810b66007ab",
+                        parent=EventParent(sha256="custom_id"),
+                        sha256="28e65c268dbcab8733e7205bab86efc9a758a0d8f2156edc85d5f810b66007ab",
                         relationship={"action": "extracted"},
                         data=[
                             EventData(

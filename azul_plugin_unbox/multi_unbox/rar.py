@@ -30,7 +30,7 @@ class Rar(BaseUnbox):
         ("compresstype", "rar_compression", None),
     ]
 
-    def exception_handler(self, ex: Exception, plugin_ref: BinaryPlugin) -> dict:
+    def exception_handler(self, ex: Exception, plugin_ref: BinaryPlugin) -> State:
         """Handle exceptions."""
         if (
             isinstance(ex, box_base.NotSupported)

@@ -22,8 +22,7 @@ class TestExecute(BaseUnboxPluginTest):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
+                        sha256="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
                         features={
                             "box_count": [FV(3)],
                             "box_filepath": [
@@ -36,11 +35,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
+                            sha256="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
                         ),
-                        entity_type="binary",
-                        entity_id="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
+                        sha256="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
                         relationship={"action": "extracted"},
                         data=[
                             EventData(
@@ -52,11 +49,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
+                            sha256="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
                         ),
-                        entity_type="binary",
-                        entity_id="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
+                        sha256="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
                         relationship={"action": "extracted"},
                         data=[
                             EventData(
@@ -68,11 +63,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
+                            sha256="74250bf1c1eb94b9ea4c2c5496e8abfa2118417856890a6e502dcfd3d627c3f2",
                         ),
-                        entity_type="binary",
-                        entity_id="c6eedc388ac70e3b6962f0626434fd664e2c4a6105cc544d36ab11d006bdd5a0",
+                        sha256="c6eedc388ac70e3b6962f0626434fd664e2c4a6105cc544d36ab11d006bdd5a0",
                         relationship={"action": "extracted"},
                         data=[
                             EventData(
@@ -102,8 +95,7 @@ class TestExecute(BaseUnboxPluginTest):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
+                        sha256="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
                         features={
                             "box_count": [FV(3)],
                             "box_filepath": [
@@ -118,11 +110,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
+                            sha256="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
                         ),
-                        entity_type="binary",
-                        entity_id="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
+                        sha256="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
                         relationship={"action": "extracted"},
                         data=[
                             EventData(
@@ -134,11 +124,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
+                            sha256="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
                         ),
-                        entity_type="binary",
-                        entity_id="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
+                        sha256="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
                         relationship={"action": "extracted"},
                         data=[
                             EventData(
@@ -150,11 +138,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
+                            sha256="992fa72f92e9b57ede1ba5e7e947f71019f60bde3a33d64d767c9e388f4a766b",
                         ),
-                        entity_type="binary",
-                        entity_id="c6eedc388ac70e3b6962f0626434fd664e2c4a6105cc544d36ab11d006bdd5a0",
+                        sha256="c6eedc388ac70e3b6962f0626434fd664e2c4a6105cc544d36ab11d006bdd5a0",
                         relationship={"action": "extracted"},
                         data=[
                             EventData(

@@ -63,8 +63,7 @@ class TestExecute(BaseUnboxPluginTest):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="3ad88941837affe0da7ec2f84e96773a5600c193e8bcbe27cc57e81d8c0c920a",
+                        sha256="3ad88941837affe0da7ec2f84e96773a5600c193e8bcbe27cc57e81d8c0c920a",
                         features={
                             "box_count": [FV(2)],
                             "box_filepath": [FV("test_file_1.txt"), FV("test_file_2.txt")],
@@ -78,11 +77,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="3ad88941837affe0da7ec2f84e96773a5600c193e8bcbe27cc57e81d8c0c920a",
+                            sha256="3ad88941837affe0da7ec2f84e96773a5600c193e8bcbe27cc57e81d8c0c920a",
                         ),
-                        entity_type="binary",
-                        entity_id="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
+                        sha256="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
                         relationship={"action": "unrar"},
                         data=[
                             EventData(
@@ -94,11 +91,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="3ad88941837affe0da7ec2f84e96773a5600c193e8bcbe27cc57e81d8c0c920a",
+                            sha256="3ad88941837affe0da7ec2f84e96773a5600c193e8bcbe27cc57e81d8c0c920a",
                         ),
-                        entity_type="binary",
-                        entity_id="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
+                        sha256="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
                         relationship={"action": "unrar"},
                         data=[
                             EventData(
@@ -127,8 +122,7 @@ class TestExecute(BaseUnboxPluginTest):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="7e92d460ef92f94f1840296206a2c82f3f6f90f971b4fdef6b626b1836657cc3",
+                        sha256="7e92d460ef92f94f1840296206a2c82f3f6f90f971b4fdef6b626b1836657cc3",
                         features={
                             "box_count": [FV(2)],
                             "box_filepath": [FV("test_file_1.txt"), FV("test_file_2.txt")],
@@ -144,11 +138,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="7e92d460ef92f94f1840296206a2c82f3f6f90f971b4fdef6b626b1836657cc3",
+                            sha256="7e92d460ef92f94f1840296206a2c82f3f6f90f971b4fdef6b626b1836657cc3",
                         ),
-                        entity_type="binary",
-                        entity_id="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
+                        sha256="77f285fd549654a7f9a54ec4dfc7597fcfd66b6622c3b31b60047204f0a213f0",
                         relationship={"action": "unrar"},
                         data=[
                             EventData(
@@ -160,11 +152,9 @@ class TestExecute(BaseUnboxPluginTest):
                     ),
                     Event(
                         parent=EventParent(
-                            entity_type="binary",
-                            entity_id="7e92d460ef92f94f1840296206a2c82f3f6f90f971b4fdef6b626b1836657cc3",
+                            sha256="7e92d460ef92f94f1840296206a2c82f3f6f90f971b4fdef6b626b1836657cc3",
                         ),
-                        entity_type="binary",
-                        entity_id="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
+                        sha256="816ac3e617f55165dd748c5b6ff16fd05b79bf5104bfd41274635019b239d02b",
                         relationship={"action": "unrar"},
                         data=[
                             EventData(

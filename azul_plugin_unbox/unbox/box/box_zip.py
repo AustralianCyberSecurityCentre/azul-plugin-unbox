@@ -28,7 +28,12 @@ class Zip(box_base.Box):
         """Get a reference to the zip file if it already exists, and always sets the new password."""
         if not self.__zip_file:
             self.__zip_file = zipfile.ZipFile(self.src_filepath)
-        self.__zip_file.setpassword(self.password_bytes)
+
+        if self.password_bytes is None:
+            self.__zip_file.setpassword(b"")
+        else:
+            self.__zip_file.setpassword(self.password_bytes)
+
         return self.__zip_file
 
     def _extract(self):
