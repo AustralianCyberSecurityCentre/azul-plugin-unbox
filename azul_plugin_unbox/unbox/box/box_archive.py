@@ -63,9 +63,9 @@ class Archive(box_base.Box):
         """
         super().__init__(src_filepath, target_dir, passwords)
         self._archive_type: ArchiveType = ArchiveType.UNKNOWN
-        self.__single_child_fname: str = ""
-        self.__metadata_encoding: str = ""
-        self.__metadata_extra_content: str = ""
+        self.__single_child_fname: str | None = None
+        self.__metadata_encoding: str | None = None
+        self.__metadata_extra_content: str | None = None
 
     def __write_single_compressed_file(self, fh: gzip.GzipFile | bz2.BZ2File | io.BufferedRandom, strip_ext: str):
         """Write a compressed Gzip or Bz2 file to disk through a stream."""
@@ -137,6 +137,8 @@ class Archive(box_base.Box):
             except (tarfile.ReadError, IOError, EOFError) as e:
                 raise box_base.NotSupported("Unable to process as tar but was expecting a tar file.") from e
         elif self._archive_type in [ArchiveType.BZ2, ArchiveType.GZ]:
+            if self.__single_child_fname is None:
+                raise TypeError("Expected self.__single_child_fname to be a str, got None")
             return [BoxChild(self.__single_child_fname, os.path.join(self.dest_filedir, self.__single_child_fname))]
 
         else:
