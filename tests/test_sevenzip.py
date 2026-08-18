@@ -1388,3 +1388,44 @@ class TestExecute(BaseUnboxPluginTest):
                 },
             ),
         )
+
+    def test_unzip_surrogate_filename(self):
+        """Handle malicious binaries where they have surrogate file names e.g \udced.
+
+        This is to ensure that unbox can handle files that have been intentionally given bad names to break parsers.
+        This is done typically as an evasion technique.
+        """
+        surrogate_zip = self.load_cart(
+            "surrogate_test.zip",
+            description="Dummy surrogate file created by the Azul team with a file containing an invalid surrogate key pair.",
+        )
+        self.assertJobResult(
+            self.get_result_from_cart(loaded_cart=surrogate_zip),
+            JobResult(
+                state=State(State.Label.COMPLETED),
+                events=[
+                    Event(
+                        sha256="3ad3d857b0e76a0747700e4e1170d534a7ad2282b85eafbec3ab24d11ad29e7d",
+                        features={
+                            "box_compression": [FV("Store", label="\\udced\\udca0\\udcbd\\udced\\udcb9\\udc8f.txt")],
+                            "box_count": [FV("1")],
+                            "box_filepath": [FV("\\udced\\udca0\\udcbd\\udced\\udcb9\\udc8f.txt")],
+                            "box_type": [FV("zip")],
+                        },
+                    ),
+                    Event(
+                        sha256="9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+                        parent=EventParent(sha256="3ad3d857b0e76a0747700e4e1170d534a7ad2282b85eafbec3ab24d11ad29e7d"),
+                        relationship={"action": "extracted"},
+                        data=[
+                            EventData(
+                                hash="9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+                                label="content",
+                            )
+                        ],
+                        features={"filename": [FV("\\udced\\udca0\\udcbd\\udced\\udcb9\\udc8f.txt")]},
+                    ),
+                ],
+                data={"9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08": b""},
+            ),
+        )
