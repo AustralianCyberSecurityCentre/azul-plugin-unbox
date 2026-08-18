@@ -233,7 +233,11 @@ class AzulPluginUnbox(BinaryPlugin):
                     # ensure we use the full file path, otherwise we could get duplicate labels
                     self.add_feature_values(
                         feature_name,
-                        FV(value=metadata if conv_func is None else conv_func(metadata), label=full_key),
+                        FV(
+                            value=metadata if conv_func is None else conv_func(metadata),
+                            # Catches case where file name is an illegal surrogate key pair.
+                            label=str().encode(errors="backslashreplace").decode(),
+                        ),
                     )
 
                 rel_metadata = []
