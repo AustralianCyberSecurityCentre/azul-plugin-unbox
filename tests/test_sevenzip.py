@@ -1424,7 +1424,7 @@ class TestExecute(BaseUnboxPluginTest):
                     Event(
                         sha256="3ad3d857b0e76a0747700e4e1170d534a7ad2282b85eafbec3ab24d11ad29e7d",
                         features={
-                            "box_compression": [FV("Store", label="")],
+                            "box_compression": [FV("Store", label="\\udced\\udca0\\udcbd\\udced\\udcb9\\udc8f.txt")],
                             "box_count": [FV("1")],
                             "box_filepath": [FV("\\udced\\udca0\\udcbd\\udced\\udcb9\\udc8f.txt")],
                             "box_type": [FV("zip")],

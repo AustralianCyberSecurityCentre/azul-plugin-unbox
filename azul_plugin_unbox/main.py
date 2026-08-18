@@ -236,7 +236,7 @@ class AzulPluginUnbox(BinaryPlugin):
                         FV(
                             value=metadata if conv_func is None else conv_func(metadata),
                             # Catches case where file name is an illegal surrogate key pair.
-                            label=str().encode(errors="backslashreplace").decode(),
+                            label=str(full_key).encode(errors="backslashreplace").decode(),
                         ),
                     )
 
