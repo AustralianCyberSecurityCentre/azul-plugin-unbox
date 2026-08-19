@@ -47,7 +47,7 @@ class AzulPluginUnbox(BinaryPlugin):
     """Multiplugin that manages the unboxing of multiple file types."""
 
     CONTACT = "ASD's ACSC"
-    VERSION = "2025.04.23"
+    VERSION = "2026.08.19"
     SETTINGS = add_settings(
         filter_max_content_size="0",  # operate on any sized file
         run_timeout=60 * 15,  # unarchivers have lots of children to be inserted so allow more time
@@ -67,6 +67,11 @@ class AzulPluginUnbox(BinaryPlugin):
             Feature(name="filename", desc="The name of the file in its parent archive", type=FeatureType.Filepath),
             # Set generic feature to allow correlation against other sources of passwords too
             Feature(name="password", desc="Password used to unbox this binary", type=FeatureType.String),
+            Feature(
+                name="suspicious",
+                desc="Description of something suspicious about a given file.",
+                type=FeatureType.String,
+            ),
         ]
     )
 
@@ -241,14 +246,26 @@ class AzulPluginUnbox(BinaryPlugin):
                     if metadata is None:
                         continue
 
-                    # ensure we use the full file path, otherwise we could get duplicate labels
-                    self.add_feature_values(
-                        feature_name,
-                        FV(
+                    try:
+                        fv = FV(
+                            value=metadata if conv_func is None else conv_func(metadata),
+                            # Catches case where file name is an illegal surrogate key pair.
+                            label=str(full_key).encode().decode(),
+                        )
+                    except UnicodeEncodeError:
+                        fv = FV(
                             value=metadata if conv_func is None else conv_func(metadata),
                             # Catches case where file name is an illegal surrogate key pair.
                             label=str(full_key).encode(errors="backslashreplace").decode(),
-                        ),
+                        )
+                        self.add_feature_values(
+                            "suspicious",
+                            FV("zip filename is using bad encoding, this is typically done by malicious files."),
+                        )
+                    # ensure we use the full file path, otherwise we could get duplicate labels
+                    self.add_feature_values(
+                        feature_name,
+                        fv,
                     )
 
                 rel_metadata = []
