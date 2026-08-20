@@ -1411,6 +1411,9 @@ class TestExecute(BaseUnboxPluginTest):
                             "box_count": [FV("1")],
                             "box_filepath": [FV("\\udced\\udca0\\udcbd\\udced\\udcb9\\udc8f.txt")],
                             "box_type": [FV("zip")],
+                            "suspicious": [
+                                FV("zip filename is using bad encoding, this is typically done by malicious files.")
+                            ],
                         },
                     ),
                     Event(
