@@ -225,7 +225,16 @@ class AzulPluginUnbox(BinaryPlugin):
                     # went well.
                     return State(State.Label.COMPLETED)
 
-                full_key = box_child.name
+                # Try and get the file name associated with the child file, if it's a surrogate string is suspicious and should be marked as such.
+                try:
+                    full_key = str(box_child.name).encode().decode()
+                except UnicodeEncodeError:
+                    full_key = str(box_child.name).encode(errors="backslashreplace").decode()
+                    self.add_feature_values(
+                        "suspicious",
+                        FV("zip filename is using bad encoding, this is typically done by malicious files."),
+                    )
+
                 child_features = {}
                 if unboxer.children_have_useable_filenames:
                     if full_key.endswith(("/", "\\")):
@@ -246,22 +255,11 @@ class AzulPluginUnbox(BinaryPlugin):
                     if metadata is None:
                         continue
 
-                    try:
-                        fv = FV(
-                            value=metadata if conv_func is None else conv_func(metadata),
-                            # Catches case where file name is an illegal surrogate key pair.
-                            label=str(full_key).encode().decode(),
-                        )
-                    except UnicodeEncodeError:
-                        fv = FV(
-                            value=metadata if conv_func is None else conv_func(metadata),
-                            # Catches case where file name is an illegal surrogate key pair.
-                            label=str(full_key).encode(errors="backslashreplace").decode(),
-                        )
-                        self.add_feature_values(
-                            "suspicious",
-                            FV("zip filename is using bad encoding, this is typically done by malicious files."),
-                        )
+                    fv = FV(
+                        value=metadata if conv_func is None else conv_func(metadata),
+                        # Catches case where file name is an illegal surrogate key pair.
+                        label=str(full_key).encode().decode(),
+                    )
                     # ensure we use the full file path, otherwise we could get duplicate labels
                     self.add_feature_values(
                         feature_name,

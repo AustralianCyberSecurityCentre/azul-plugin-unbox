@@ -26,13 +26,13 @@ class BaseUnboxPluginTest(test_template.TestPlugin):
 
         super().setUp()
 
-    def get_result_from_cart(self, loaded_cart: bytes, *, format_override="", ent_id_override=""):
+    def get_result_from_cart(self, loaded_cart: bytes, *, format_override="", ent_id_override="") -> JobResult | None:
         """Shorthand to get message result."""
 
         if format_override == "":
             format_override = self.unbox_type_key
 
-        result = self.do_execution(
+        result = self.do_execution_multi(
             ent_id=ent_id_override,
             entity_attrs={"file_format": format_override},
             data_in=[("content", loaded_cart)],
