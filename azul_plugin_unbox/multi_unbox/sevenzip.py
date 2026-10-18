@@ -24,9 +24,13 @@ class SevenZip(BaseUnbox):
     """Use 7Zip to extract files from many archive formats."""
 
     INPUT_DATA_TYPE = list(TYPE_MAP.keys())
-    FEATURES = [
-        Feature(name="box_compression", desc="Compression method used on this file entry", type=FeatureType.String),
-    ]
+    FEATURES = set(
+        [
+            Feature(
+                name="box_compression", desc="Compression method used on this file entry", type=FeatureType.String
+            ),
+        ]
+    )
 
     box_display_name = "sevenzip"
     box_class = "Szip"
