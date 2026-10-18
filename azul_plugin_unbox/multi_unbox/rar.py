@@ -17,9 +17,11 @@ class Rar(BaseUnbox):
     """Extract files from RAR archives."""
 
     INPUT_DATA_TYPE = ["archive/rar"]
-    FEATURES = [
-        Feature(name="rar_compression", desc="Compression used on the contained file", type=FeatureType.Integer),
-    ]
+    FEATURES = set(
+        [
+            Feature(name="rar_compression", desc="Compression used on the contained file", type=FeatureType.Integer),
+        ]
+    )
 
     box_display_name = "rar"
     box_class = "Rar"

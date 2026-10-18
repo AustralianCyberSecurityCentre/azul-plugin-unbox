@@ -31,9 +31,11 @@ class UPX(BaseUnbox):
         "executable/linux/so32",
         "executable/mach-o",
     ]
-    FEATURES = [
-        Feature(name="upx_version", desc="Detected upx version used to pack executable", type=FeatureType.String),
-    ]
+    FEATURES = set(
+        [
+            Feature(name="upx_version", desc="Detected upx version used to pack executable", type=FeatureType.String),
+        ]
+    )
 
     children_have_useable_filenames = False
     box_display_name = "upx"
