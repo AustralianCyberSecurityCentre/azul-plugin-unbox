@@ -314,11 +314,11 @@ class Unzip(object):
 
     def extract(self, dest_dir: str, filename: str) -> str:
         """Extract the contents of a single child file from an arj file and return the path to the extracted file."""
-        return self._extract(dest_dir, filename)  # ty: ignore[invalid-return-type] str vs. list[str] logic is handled by self._extract()
+        return self._extract(dest_dir, filename)  # ty: ignore[invalid-explicit-return] str vs. list[str] logic is handled by self._extract()
 
     def extract_all(self, dest_dir: str) -> list[str]:
         """Extract the contents of all child object in an arj archive and return the path to all extracted files."""
-        return self._extract(dest_dir)  # ty: ignore[invalid-return-type] str vs. list[str] logic is handled by self._extract()
+        return self._extract(dest_dir)  # ty: ignore[invalid-explicit-return] str vs. list[str] logic is handled by self._extract()
 
     def __len__(self):
         """Return how many file entries in this ARJ file."""
