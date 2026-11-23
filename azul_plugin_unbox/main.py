@@ -152,7 +152,7 @@ class AzulPluginUnbox(BinaryPlugin):
         passwords.extend(provided_passwords)
         passwords.extend(settings_provided_passwords)
 
-        self.current_file_format = data.file_info.file_format  # ty: ignore[missing-attribute] file_info being None is already handled above
+        self.current_file_format = data.file_info.file_format  # ty: ignore[missing-union-attribute] file_info being None is already handled above
         self.current_passwords = passwords
         self.current_source_filepath = data.get_filepath()
 
