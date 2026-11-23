@@ -148,11 +148,11 @@ class AzulPluginUnbox(BinaryPlugin):
         settings_provided_passwords = [x for x in settings_provided_passwords.split("\n") if x]
 
         # make a copy of passwords to avoid a box modifying them for future runs
-        passwords = list(self.cfg.default_passwords or ["password", "infected"])  # ty: ignore[unresolved-attribute] ty doesn't understand add_settings
+        passwords = list(self.cfg.default_passwords or ["password", "infected"])  # ty: ignore[missing-attribute] ty doesn't understand add_settings
         passwords.extend(provided_passwords)
         passwords.extend(settings_provided_passwords)
 
-        self.current_file_format = data.file_info.file_format  # ty: ignore[unresolved-attribute] file_info being None is already handled above
+        self.current_file_format = data.file_info.file_format  # ty: ignore[missing-attribute] file_info being None is already handled above
         self.current_passwords = passwords
         self.current_source_filepath = data.get_filepath()
 
@@ -189,7 +189,7 @@ class AzulPluginUnbox(BinaryPlugin):
 
         child_filepaths = []
         file_count = 0
-        max_files = self.cfg.max_extracted_files or 1000  # ty: ignore[unresolved-attribute] ty doesn't understand add_settings
+        max_files = self.cfg.max_extracted_files or 1000  # ty: ignore[missing-attribute] ty doesn't understand add_settings
         # Add each child for this box type
         try:
             try:
